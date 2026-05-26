@@ -1,0 +1,1 @@
+vless://24e61e7c-4130-490d-9b6e-9d9ffffaa706@fi2.gofizzin.com:443?type=tcp&security=reality&flow=xtls-rprx-vision&fp=chrome&pbk=9DqaudXHpJqDjmVkJ5f-xgGySt1u26tQwUWcwX7YOx4&sid=9cfdf8b0&sni=fi2.gofizzin.com&spx=/Pe3SQIQ7mssSW2p#🇫🇮 LTE 7mssSW2p | тгк: @rostunnel
