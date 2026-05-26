@@ -7,26 +7,22 @@ on:
 
 permissions:
   contents: write
-  actions: read
 
 jobs:
   check-keys:
     runs-on: ubuntu-latest
-    environment:
-      name: test
     timeout-minutes: 350
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
-          fetch-depth: 0  # Полная история для rebase + merge
+          fetch-depth: 0
           token: ${{ secrets.SGITHUB_TOKEN }}
 
-      - name: Sync latest main  # Фикс non-fast-forward
+      - name: Sync latest main
         run: |
-          git config pull.rebase true
-          git pull origin main
+          git pull --rebase origin main
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -37,9 +33,9 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
 
-      - name: Download Xray linux amd64
+      - name: Download Xray
         run: |
-          curl -L "https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip" -o xray.zip
+          curl -L https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip -o xray.zip
           unzip -o xray.zip
           chmod +x xray
 
@@ -50,11 +46,10 @@ jobs:
           PYTHONUNBUFFERED: 1
 
       - name: Commit & Push Results
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "🤖 Auto-update checked keys [${{ github.run_id }}]"
           file_pattern: "checked/*"
           commit_user_name: "GitHub Actions Bot"
           commit_user_email: "actions@github.com"
-          push_options: '--force-with-lease'  # Безопасный force на случай редких гонок
-
+          push_options: '--force-with-lease'
