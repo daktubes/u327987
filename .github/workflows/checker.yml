@@ -21,8 +21,7 @@ jobs:
           token: ${{ secrets.SGITHUB_TOKEN }}
 
       - name: Sync latest main
-        run: |
-          git pull --rebase origin main
+        run: git pull --rebase origin main
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -46,10 +45,13 @@ jobs:
           PYTHONUNBUFFERED: 1
 
       - name: Commit & Push Results
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: "🤖 Auto-update checked keys [${{ github.run_id }}]"
-          file_pattern: "checked/*"
-          commit_user_name: "GitHub Actions Bot"
-          commit_user_email: "actions@github.com"
-          push_options: '--force-with-lease'
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+          git add checked/
+
+          git diff --cached --quiet && echo "No changes" && exit 0
+
+          git commit -m "🤖 Auto-update checked keys [${{ github.run_id }}]"
+          git push --force-with-lease origin HEAD:main
